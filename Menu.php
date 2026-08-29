@@ -1,6 +1,52 @@
+<?php
+// Define menu items array for easy dynamic rendering
+$menuItems = [
+    [
+        'title'       => 'Pan-Seared Salmon',
+        'category'    => 'mains',
+        'price'       => 38.00,
+        'description' => 'Fresh Atlantic salmon served with roasted asparagus, dill cream sauce, and lemon zest.',
+        'image'       => 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=80',
+        'tag'         => 'Gluten-Free'
+    ],
+    [
+        'title'       => 'Truffle Parmesan Fries',
+        'category'    => 'starters',
+        'price'       => 18.00,
+        'description' => 'Hand-cut fries tossed in white truffle oil, grated parmesan cheese, and fresh parsley.',
+        'image'       => 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80',
+        'tag'         => 'Vegetarian'
+    ],
+    [
+        'title'       => 'Molten Chocolate Cake',
+        'category'    => 'desserts',
+        'price'       => 22.00,
+        'description' => 'Warm dark chocolate cake with a molten center, served with vanilla bean gelato.',
+        'image'       => 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80',
+        'tag'         => null
+    ],
+    [
+        'title'       => 'Rosemary Citrus Mocktail',
+        'category'    => 'drinks',
+        'price'       => 16.00,
+        'description' => 'Non-alcoholic sparkling blend with fresh orange juice, smoked rosemary syrup, and soda.',
+        'image'       => 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80',
+        'tag'         => 'Halal Mocktail'
+    ]
+];
+
+// Define filter categories
+$categories = [
+    'all'      => 'All',
+    'starters' => 'Starters',
+    'mains'    => 'Mains',
+    'desserts' => 'Desserts',
+    'drinks'   => 'Drinks'
+];
+?>
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu - Featured Items</title>
@@ -12,8 +58,8 @@
         display: none !important;
       }
     </style>
-  </head>
-  <body>
+</head>
+<body>
     <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
       <div class="container-fluid">
         <a class="navbar-brand" href="index.php">Fork & Flame</a>
@@ -23,7 +69,7 @@
         <div class="collapse navbar-collapse" id="navbarColor01">
           <ul class="navbar-nav me-auto">
             <li class="nav-item">
-              <a class="nav-link" href="Menu.php">Menu</a>
+              <a class="nav-link active" href="menu.php">Menu</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="Booking.php">Booking</a>
@@ -47,68 +93,32 @@
 
         <!-- Category Filter Buttons -->
         <div class="menu-filters">
-          <button class="filter-btn active" data-filter="all">All</button>
-          <button class="filter-btn" data-filter="starters">Starters</button>
-          <button class="filter-btn" data-filter="mains">Mains</button>
-          <button class="filter-btn" data-filter="desserts">Desserts</button>
-          <button class="filter-btn" data-filter="drinks">Drinks</button>
+          <?php foreach ($categories as $key => $label): ?>
+            <button class="filter-btn <?= $key === 'all' ? 'active' : '' ?>" data-filter="<?= htmlspecialchars($key) ?>">
+                <?= htmlspecialchars($label) ?>
+            </button>
+          <?php endforeach; ?>
         </div>
 
         <!-- Menu Grid -->
         <div class="menu-grid">
-          
-          <!-- Item 1: Mains -->
-          <div class="menu-item mains">
-            <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=80" alt="Pan-Seared Salmon" class="menu-img" />
-            <div class="menu-details">
-              <div class="menu-title-price">
-                <h3>Pan-Seared Salmon</h3>
-                <span class="price">RM 38.00</span>
+          <?php foreach ($menuItems as $item): ?>
+            <div class="menu-item <?= htmlspecialchars($item['category']) ?>">
+              <img src="<?= htmlspecialchars($item['image']) ?>" alt="<?= htmlspecialchars($item['title']) ?>" class="menu-img" />
+              <div class="menu-details">
+                <div class="menu-title-price">
+                  <h3><?= htmlspecialchars($item['title']) ?></h3>
+                  <span class="price">RM <?= number_format($item['price'], 2) ?></span>
+                </div>
+                <p class="description"><?= htmlspecialchars($item['description']) ?></p>
+                <?php if (!empty($item['tag'])): ?>
+                  <span class="tag"><?= htmlspecialchars($item['tag']) ?></span>
+                <?php endif; ?>
               </div>
-              <p class="description">Fresh Atlantic salmon served with roasted asparagus, dill cream sauce, and lemon zest.</p>
-              <span class="tag">Gluten-Free</span>
             </div>
-          </div>
-
-          <!-- Item 2: Starters -->
-          <div class="menu-item starters">
-            <img src="https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80" alt="Truffle Parmesan Fries" class="menu-img" />
-            <div class="menu-details">
-              <div class="menu-title-price">
-                <h3>Truffle Parmesan Fries</h3>
-                <span class="price">RM 18.00</span>
-              </div>
-              <p class="description">Hand-cut fries tossed in white truffle oil, grated parmesan cheese, and fresh parsley.</p>
-              <span class="tag">Vegetarian</span>
-            </div>
-          </div>
-
-          <!-- Item 3: Desserts -->
-          <div class="menu-item desserts">
-            <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80" alt="Molten Chocolate Cake" class="menu-img" />
-            <div class="menu-details">
-              <div class="menu-title-price">
-                <h3>Molten Chocolate Cake</h3>
-                <span class="price">RM 22.00</span>
-              </div>
-              <p class="description">Warm dark chocolate cake with a molten center, served with vanilla bean gelato.</p>
-            </div>
-          </div>
-
-          <!-- Item 4: Mocktail (Drinks) -->
-          <div class="menu-item drinks">
-            <img src="https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80" alt="Smoked Rosemary Sparkler Mocktail" class="menu-img" />
-            <div class="menu-details">
-              <div class="menu-title-price">
-                <h3>Rosemary Citrus Mocktail</h3>
-                <span class="price">RM 16.00</span>
-              </div>
-              <p class="description">Non-alcoholic sparkling blend with fresh orange juice, smoked rosemary syrup, and soda.</p>
-              <span class="tag">Halal Mocktail</span>
-            </div>
-          </div>
-
+          <?php endforeach; ?>
         </div>
+
       </div>
     </section>
 
@@ -120,13 +130,11 @@
 
         filterBtns.forEach(btn => {
           btn.addEventListener('click', () => {
-            // Remove active class from all buttons and set active on the clicked button
             filterBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
             const filterValue = btn.getAttribute('data-filter');
 
-            // Show or hide items based on filter category
             menuItems.forEach(item => {
               if (filterValue === 'all' || item.classList.contains(filterValue)) {
                 item.classList.remove('hide');
@@ -138,5 +146,5 @@
         });
       });
     </script>
-  </body>
+</body>
 </html>
